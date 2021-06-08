@@ -1,0 +1,4 @@
+FROM openjdk:11
+EXPOSE 8082
+ADD /jar/movieInfo-0.0.1.jar movieInfo.jar
+ENTRYPOINT ["java","-jar","movieInfo.jar"]

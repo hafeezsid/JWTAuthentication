@@ -1,0 +1,12 @@
+version: 1.0
+phases:
+  build:
+    commands:
+    - mvn clean
+      mvn install
+artifacts:
+  files:
+  - 'Dockerfile'
+  - 'target/eurekaServer-0.0.1.jar'
+  
+  

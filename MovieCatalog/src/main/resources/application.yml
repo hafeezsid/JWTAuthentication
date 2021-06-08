@@ -1,0 +1,10 @@
+#management.endpoints.web.exposure.include=hystrix.stream
+server:
+   port: 8081
+   servlet:
+      context-path: /movieCatalog
+spring:
+   application:
+      name: MOVIE-CATALOG-SERVICE
+      
+   
