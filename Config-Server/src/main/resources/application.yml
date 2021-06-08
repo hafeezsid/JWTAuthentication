@@ -1,0 +1,10 @@
+spring:
+   application:
+      name: CONFIG-SERVER
+   config:
+      server:
+         git:
+            uri: https://github.com/hafeezsid/config-server-repo
+server:
+   port: 9000
+   

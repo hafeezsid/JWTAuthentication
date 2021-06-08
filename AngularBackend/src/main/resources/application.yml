@@ -1,0 +1,16 @@
+server:
+   port: 8085
+   servlet:
+      context-path: /angular
+spring:
+   application:
+      name: ANGULAR-BACKEND
+   h2:
+      console:
+         enabled: true
+      
+application:
+   security:
+      key: "hafeezSecret"
+
+      

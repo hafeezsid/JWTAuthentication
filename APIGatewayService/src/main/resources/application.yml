@@ -1,0 +1,16 @@
+server:
+   port: 8086
+spring:
+   application:
+      name: CLOUD_GATEWAY
+   cloud:
+      gateway:
+         routes:
+            - id: angular-backend
+              uri: lb://ANGULAR-BACKEND
+              predicates:
+                 - Path=/angular/**
+            - id: movie-Catalog
+              uri: lb://MOVIE-CATALOG-SERVICE
+              predicates:
+                 - Path=/movieCatalog/**
