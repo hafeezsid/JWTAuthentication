@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import com.example.demo.model.ExceptionResponse;
+
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 	
@@ -19,6 +21,17 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 		response.setErrorCode("Unauthorised");
 		response.setExceptionTime(LocalDateTime.now());
 		return new ResponseEntity<ExceptionResponse>(response,HttpStatus.UNAUTHORIZED);
+	}
+	
+	
+	@ExceptionHandler(AuthenticationException.class)
+	public ResponseEntity<ExceptionResponse> authenticationException(AuthenticationException ex)
+	{
+		ExceptionResponse response=new ExceptionResponse();
+		response.setMessage(ex.getMessage());
+		response.setErrorCode("Authentication Error");
+		response.setExceptionTime(LocalDateTime.now());
+		return new ResponseEntity<ExceptionResponse>(response,HttpStatus.FORBIDDEN);
 	}
 	
 	@ExceptionHandler(ResouceAlreadyExist.class)

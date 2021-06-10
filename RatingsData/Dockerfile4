@@ -1,0 +1,4 @@
+FROM openjdk:11
+EXPOSE 8083
+ADD /jarDir/ratingsData-0.0.1.jar ratingsData.jar
+ENTRYPOINT ["java","-jar","ratingsData.jar"]

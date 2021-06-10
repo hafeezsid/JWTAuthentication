@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.model.User;
+import com.example.demo.model.UserPrincipal;
 import com.example.demo.repository.UserRepository;
 
 @Service
@@ -17,7 +18,7 @@ public class CustomUserDetailService implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		User user=userReop.findByUsername(username);
+		UserPrincipal user= new UserPrincipal(userReop.findByUsername(username)) ;
 		return user;
 	}
 

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.exceptionHandler.UnauthorisedException;
 import com.example.demo.model.AuthRequest;
 import com.example.demo.utils.JwtUtil;
 
@@ -22,14 +23,16 @@ public class AuthenticationController {
 	JwtUtil JwtUtil;
 	
 	@PostMapping
-	public String authenticate(@RequestBody AuthRequest request) throws Exception
+	public String authenticate(@RequestBody AuthRequest request) throws UnauthorisedException
 	{
 		try {
+		System.out.println(request.getUsername());
 		authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
+		
 		}
-		catch(Exception ex)
+		catch(org.springframework.security.core.AuthenticationException ex)
 		{
-			throw new Exception("Invalid credentials");
+			throw new UnauthorisedException(ex.getMessage());
 		}
 		
 		return JwtUtil.generateToken(request.getUsername());

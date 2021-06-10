@@ -1,22 +1,42 @@
 package com.example.demo.utils;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.constants.SecurityConstant;
+import com.example.demo.model.User;
+import com.example.demo.model.UserPrincipal;
+import com.example.demo.repository.UserRepository;
+
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.SignatureException;
 
 @Service
 public class JwtUtil {
+	Logger log = LoggerFactory.getLogger(JwtUtil.class);
 	@Value(value="${application.security.key}")
 	private String secret;
+	
+	@Autowired
+	UserRepository userRepository;
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -30,7 +50,7 @@ public class JwtUtil {
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
     }
-    private Claims extractAllClaims(String token) {
+    private Claims extractAllClaims(String token) throws SignatureException, MalformedJwtException,ExpiredJwtException  {
         return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
     }
 
@@ -39,14 +59,30 @@ public class JwtUtil {
     }
 
     public String generateToken(String username) {
-        Map<String, Object> claims = new HashMap<>();
+        Map<String, Object> claims = getClaimsMapFromUserPrincipal(username);
         return createToken(claims, username);
     }
 
-    private String createToken(Map<String, Object> claims, String subject) {
+    private Collection<? extends GrantedAuthority> getAuthorities(String token) {
+    		Claims claims=extractAllClaims(token);
+    	 Collection<? extends GrantedAuthority> authoritiesList=
+    			 Stream.of(claims.get(SecurityConstant.AUTORITIES).toString().split(","))
+    			 .map(SimpleGrantedAuthority::new).collect(Collectors.toList());
+		return authoritiesList;
+	}
+    private Map<String, Object> getClaimsMapFromUserPrincipal(String username) {
+    	User user=userRepository.findByUsername(username);
+    	UserPrincipal up=new UserPrincipal(user);
+		Map<String,Object> claims=new HashMap<String,Object>();
+		claims.put(SecurityConstant.AUTORITIES, up.getAuthorities());
+		return claims;
+	}
+    
+
+	private String createToken(Map<String, Object> claims, String subject) {
 
         return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))
+                .setExpiration(new Date(System.currentTimeMillis() + SecurityConstant.EXPIRATION_TIME))
                 .signWith(SignatureAlgorithm.HS256, secret).compact();
     }
 
