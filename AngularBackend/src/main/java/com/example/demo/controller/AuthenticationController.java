@@ -1,6 +1,8 @@
 package com.example.demo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.exceptionHandler.UnauthorisedException;
 import com.example.demo.model.AuthRequest;
+import com.example.demo.model.AuthResp;
 import com.example.demo.utils.JwtUtil;
 
 @RestController
@@ -23,7 +26,7 @@ public class AuthenticationController {
 	JwtUtil JwtUtil;
 	
 	@PostMapping
-	public String authenticate(@RequestBody AuthRequest request) throws UnauthorisedException
+	public ResponseEntity<AuthResp> authenticate(@RequestBody AuthRequest request) throws UnauthorisedException
 	{
 		try {
 		System.out.println(request.getUsername());
@@ -35,7 +38,11 @@ public class AuthenticationController {
 			throw new UnauthorisedException(ex.getMessage());
 		}
 		
-		return JwtUtil.generateToken(request.getUsername());
+		String jwtToken=JwtUtil.generateToken(request.getUsername());
+		AuthResp ar=new AuthResp();
+		ar.setUsername(request.getUsername());
+		ar.setToken(jwtToken);
+		return new ResponseEntity<AuthResp>(ar,HttpStatus.OK);
 	}
 
 }

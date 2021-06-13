@@ -26,6 +26,7 @@ import com.example.demo.utils.JwtUtil;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureException;
+import io.jsonwebtoken.UnsupportedJwtException;
 
 @Component
 public class JWTSecurityFilter extends OncePerRequestFilter {
@@ -74,7 +75,7 @@ public class JWTSecurityFilter extends OncePerRequestFilter {
 	        log.info("Expired JWT token.");
 	        log.trace("Expired JWT token trace: {}", e);
 	        throw new CustomException(e.getMessage());
-	    } /*catch (UnsupportedJwtException e) {
+	    } catch (UnsupportedJwtException e) {
 	        log.info("Unsupported JWT token.");
 	        log.trace("Unsupported JWT token trace: {}", e);
 	        throw new AuthenticationException(e.getMessage());
@@ -82,7 +83,7 @@ public class JWTSecurityFilter extends OncePerRequestFilter {
 	        log.info("JWT token compact of handler are invalid.");
 	        log.trace("JWT token compact of handler are invalid trace: {}", e);
 	        throw new AuthenticationException(e.getMessage());
-	    }*/
+	    }
 		filterChain.doFilter(request, response);
 		
 	}

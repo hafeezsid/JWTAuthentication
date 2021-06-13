@@ -2,7 +2,7 @@ package com.example.demo.constants;
 
 public class SecurityConstant {
 	
-	public static final long EXPIRATION_TIME= 60000; // 60 * 1000
+	public static final long EXPIRATION_TIME= 120000; // 60 * 1000
 	public static final String TOKEN_PREFIX= "Bearer ";
 	public static final String TOKEN_ISSUER= "Organic Farm LTD";
 	public static final String JWT_TOKEN_HEADER="Jwt-Token";
