@@ -18,7 +18,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import com.ecommerce.api.constants.SecurityConstant;
-import com.ecommerce.api.model.User;
+import com.ecommerce.api.entity.User;
 import com.ecommerce.api.model.UserPrincipal;
 import com.ecommerce.api.repository.UserRepository;
 

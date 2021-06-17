@@ -1,16 +1,13 @@
-package com.ecommerce.api.model;
+package com.ecommerce.api.entity;
 
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity(name = "users")
 public class User implements Serializable {
@@ -21,28 +18,30 @@ public class User implements Serializable {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "user_id")
 	private long id;
 	@Column(name = "first_name")
 	private String firstName;
 	@Column(name = "last_name")
 	private String lastName;
+	@Column(name = "mid_name")
+	private String middleName;
 	@Column(name = "email")
 	private String email;
 	@Column(name = "username")
 	private String username;
 	@Column(name = "password")
 	private String password;
+	@Column(name = "contact_number")
+	private String contactNumber;
 	@Column(name = "join_date")
-	private String joinDate;
+	private Date joinDate;
 	@Column(name = "is_not_locked")
 	private boolean isNotLocked;
 	@Column(name = "profile_img_url")
 	private String profileImgUrl;
 	@Column(name = "is_active")
 	private boolean isActive;
-	
-	@Column(name = "email_token")
-	private boolean emailToken;
 	
 	
 	private String[] roles; // ROLE_USER, ROLE_ADMIN
@@ -69,7 +68,7 @@ public class User implements Serializable {
 	}
 	
 	public User(long id, String firstName, String lastName, String email, String username, String password,
-			String joinDate, boolean isNotLocked, String profileImgUrl, boolean isActive, String[] roles,
+			Date joinDate, boolean isNotLocked, String profileImgUrl, boolean isActive, String[] roles,
 			String[] authorities) {
 		super();
 		this.id = id;
@@ -88,7 +87,7 @@ public class User implements Serializable {
 	
 	
 
-	public User(String firstName, String lastName, String email, String username, String password, String joinDate,
+	public User(String firstName, String lastName, String email, String username, String password, Date joinDate,
 			boolean isNotLocked, String profileImgUrl, boolean isActive) {
 		super();
 		this.firstName = firstName;
@@ -137,11 +136,11 @@ public class User implements Serializable {
 		this.password = password;
 	}
 
-	public String getJoinDate() {
+	public Date getJoinDate() {
 		return joinDate;
 	}
 
-	public void setJoinDate(String joinDate) {
+	public void setJoinDate(Date joinDate) {
 		this.joinDate = joinDate;
 	}
 
@@ -189,6 +188,22 @@ public class User implements Serializable {
 
 	public String getUsername() {
 		return username;
+	}
+
+	public String getMiddleName() {
+		return middleName;
+	}
+
+	public void setMiddleName(String middleName) {
+		this.middleName = middleName;
+	}
+
+	public String getContactNumber() {
+		return contactNumber;
+	}
+
+	public void setContactNumber(String contactNumber) {
+		this.contactNumber = contactNumber;
 	}
 	
 	

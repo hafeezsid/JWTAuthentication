@@ -34,8 +34,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 		return new ResponseEntity<ExceptionResponse>(response,HttpStatus.FORBIDDEN);
 	}
 	
-	@ExceptionHandler(ResouceAlreadyExist.class)
-	public ResponseEntity<ExceptionResponse> resourceAlreadyExist(ResouceAlreadyExist ex)
+	@ExceptionHandler(ResourceAlreadyExist.class)
+	public ResponseEntity<ExceptionResponse> resourceAlreadyExist(ResourceAlreadyExist ex)
 	{
 		ExceptionResponse response=new ExceptionResponse();
 		response.setMessage(ex.getMessage());
@@ -59,7 +59,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 	{
 		ExceptionResponse response=new ExceptionResponse();
 		response.setMessage(ex.getMessage());
-		response.setErrorCode("Not found");
+		response.setErrorCode("Internal Server Error");
 		response.setExceptionTime(LocalDateTime.now());
 		return new ResponseEntity<ExceptionResponse>(response,HttpStatus.NOT_FOUND);
 	}
