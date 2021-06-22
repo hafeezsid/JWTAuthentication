@@ -33,7 +33,7 @@ public class EmailService {
 		email.setFrom("noreply@organicFarm.com");
 		email.setTo("mohdsiddiqui121@gmail.com"); 
 		email.setSubject("Registration Activation link"); 
-		email.setText("Thank you for registring with organic farm.\r\nYour are now one step away to activate your account. Please click on below link to activate your account."+"\r\n"+confirmationTokenUrl+"\r\n\nThis is an automated mail from system. Please donot reply");
+		email.setText("Thank you for registring with organic farm.\r\nYou are now one step away to activate your account. Please click on below link to activate your account."+"\r\n"+confirmationTokenUrl+"\r\n\nThis is an automated mail from system. Please donot reply");
         javaMailSender.send(email);
         return true;
 		}

@@ -66,15 +66,15 @@ public class JWTSecurityFilter extends OncePerRequestFilter {
 		}catch (SignatureException e) {
 	        log.info("Invalid JWT signature.");
 	        log.trace("Invalid JWT signature trace: {}", e);
-	        throw new AuthenticationException(e.getMessage());
+	        throw new AuthenticationException("Invalid JWT signature");
 	    } catch (MalformedJwtException e) {
 	        log.info("Invalid JWT token.");
 	        log.trace("Invalid JWT token trace: {}", e);
-	        throw new AuthenticationException(e.getMessage());
+	        throw new AuthenticationException("Invalid JWT token");
 	    } catch (ExpiredJwtException e) {
-	        log.info("Expired JWT token.");
+	        log.info("Your");
 	        log.trace("Expired JWT token trace: {}", e);
-	        throw new CustomException(e.getMessage());
+	        throw new AuthenticationException("User session has expired");
 	    } catch (UnsupportedJwtException e) {
 	        log.info("Unsupported JWT token.");
 	        log.trace("Unsupported JWT token trace: {}", e);

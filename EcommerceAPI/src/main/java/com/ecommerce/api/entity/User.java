@@ -3,11 +3,15 @@ package com.ecommerce.api.entity;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 
 @Entity(name = "users")
 public class User implements Serializable {
@@ -38,7 +42,11 @@ public class User implements Serializable {
 	private Date joinDate;
 	@Column(name = "is_not_locked")
 	private boolean isNotLocked;
-	@Column(name = "profile_img_url")
+	
+	@OneToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+	@JoinColumn(name = "profileImageId",referencedColumnName = "image_id")
+	private ProfileImage profileImage;
+	
 	private String profileImgUrl;
 	@Column(name = "is_active")
 	private boolean isActive;
@@ -204,6 +212,14 @@ public class User implements Serializable {
 
 	public void setContactNumber(String contactNumber) {
 		this.contactNumber = contactNumber;
+	}
+
+	public ProfileImage getProfileImage() {
+		return profileImage;
+	}
+
+	public void setProfileImage(ProfileImage profileImage) {
+		this.profileImage = profileImage;
 	}
 	
 	

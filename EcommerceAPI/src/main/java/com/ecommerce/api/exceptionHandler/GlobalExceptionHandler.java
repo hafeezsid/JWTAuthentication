@@ -61,7 +61,17 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 		response.setMessage(ex.getMessage());
 		response.setErrorCode("Internal Server Error");
 		response.setExceptionTime(LocalDateTime.now());
-		return new ResponseEntity<ExceptionResponse>(response,HttpStatus.NOT_FOUND);
+		return new ResponseEntity<ExceptionResponse>(response,HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
+	@ExceptionHandler(ApplicationException.class)
+	public ResponseEntity<ExceptionResponse> applicationException(ApplicationException ex)
+	{
+		ExceptionResponse response=new ExceptionResponse();
+		response.setMessage(ex.getMessage());
+		response.setErrorCode("Internal Server Error");
+		response.setExceptionTime(LocalDateTime.now());
+		return new ResponseEntity<ExceptionResponse>(response,HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
 }
