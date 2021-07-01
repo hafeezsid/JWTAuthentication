@@ -31,6 +31,8 @@ import com.ecommerce.api.repository.ProfileImageRepository;
 import com.ecommerce.api.repository.UserRepository;
 import com.ecommerce.api.service.UserService;
 
+import jdk.jfr.ContentType;
+
 @RestController
 @RequestMapping("/user")
 public class UserController {

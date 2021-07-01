@@ -44,13 +44,28 @@ public class User implements Serializable {
 	private boolean isNotLocked;
 	
 	@OneToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
-	@JoinColumn(name = "profileImageId",referencedColumnName = "image_id")
+	@JoinColumn(name = "profile_image_id",referencedColumnName = "image_id")
 	private ProfileImage profileImage;
 	
+	
+	@OneToOne(mappedBy = "user",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+	private TutorPersonalInfo tutorPersonalInfo;
+	
+	/*
+	 * @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+	 * 
+	 * @JoinColumn(name = "stuudent_profile_id",referencedColumnName =
+	 * "student_profile_id") private StudentProfile studentProfile;
+	 */
 	private String profileImgUrl;
 	@Column(name = "is_active")
 	private boolean isActive;
 	
+	@Column
+	private String userType;
+	
+	@Column 
+	private Boolean isProfileComplete;
 	
 	private String[] roles; // ROLE_USER, ROLE_ADMIN
 	private String[] authorities; // delete, update, read, insert
@@ -222,7 +237,45 @@ public class User implements Serializable {
 		this.profileImage = profileImage;
 	}
 	
-	
+
+
+	public TutorPersonalInfo getTutorPersonalInfo() {
+		return tutorPersonalInfo;
+	}
+
+	public void setTutorPersonalInfo(TutorPersonalInfo tutorPersonalInfo) {
+		this.tutorPersonalInfo = tutorPersonalInfo;
+	}
+
+	public Boolean getIsProfileComplete() {
+		return isProfileComplete;
+	}
+
+	public void setIsProfileComplete(Boolean isProfileComplete) {
+		this.isProfileComplete = isProfileComplete;
+	}
+
+	/*
+	 * public StudentProfile getStudentProfile() { return studentProfile; }
+	 * 
+	 * public void setStudentProfile(StudentProfile studentProfile) {
+	 * this.studentProfile = studentProfile; }
+	 */
+	public String getUserType() {
+		return userType;
+	}
+
+	public void setUserType(String userType) {
+		this.userType = userType;
+	}
+
+	public boolean isProfileComplete() {
+		return isProfileComplete;
+	}
+
+	public void setProfileComplete(boolean isProfileComplete) {
+		this.isProfileComplete = isProfileComplete;
+	}
 	
 	
 }

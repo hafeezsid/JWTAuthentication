@@ -1,5 +1,7 @@
 package com.ecommerce.api.entity;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,7 +10,12 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 
 @Entity
-public class ProfileImage {
+public class ProfileImage implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3418273284517343714L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,6 +25,10 @@ public class ProfileImage {
 	@Lob
 	private byte[] image;
 
+	
+	public ProfileImage() {
+		// TODO Auto-generated constructor stub
+	}
 	public Long getProfileImageId() {
 		return profileImageId;
 	}

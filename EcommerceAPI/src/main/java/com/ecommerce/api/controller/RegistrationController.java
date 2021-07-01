@@ -77,6 +77,7 @@ public class RegistrationController {
 			newUser.setJoinDate(new Date());
 			newUser.setUsername(user.getEmail());
 			newUser.setNotLocked(true);
+			newUser.setProfileComplete(false);
 			newUser.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 			newUser = userService.saveUser(newUser);
 			if (newUser.getId() != 0) {

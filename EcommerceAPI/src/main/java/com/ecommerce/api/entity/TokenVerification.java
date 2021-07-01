@@ -1,5 +1,6 @@
 package com.ecommerce.api.entity;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Date;
@@ -13,7 +14,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 
 @Entity
-public class TokenVerification {
+public class TokenVerification implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6105797526783024541L;
+
 	private static final int EXPIRATION = 60 * 24;
 
 	@Id
