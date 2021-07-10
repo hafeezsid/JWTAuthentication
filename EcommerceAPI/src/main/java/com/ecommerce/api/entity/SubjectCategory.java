@@ -8,6 +8,7 @@ import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -17,27 +18,25 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-public class ProfileImage implements Serializable {
-
+public class SubjectCategory implements Serializable{
+	
+	
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -3418273284517343714L;
+	private static final long serialVersionUID = -7709528270279766160L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "image_id")
-	private Long profileImageId;
-
-	@Column
-	private byte[] image;
-
-	@Column(name = "name")
-	private String name;
-
-	@Column(name = "type")
-	private String type;
-
+	@Column(name = "subject_categ_id")
+	private long subjectCategId;
+	
+	@Column(name = "categ_name", unique = true)
+	private long categName;
+	
+	@OneToOne(mappedBy = "subjectCateg")
+	private Subject subject;
+	
 	@Column(name = "created_date", nullable = false, updatable = false)
     @CreatedDate
     private long createdDate;
@@ -53,40 +52,29 @@ public class ProfileImage implements Serializable {
     @Column(name = "modified_by")
     @LastModifiedBy
     private String modifiedBy;
-	
-	public ProfileImage() {
+
+	public long getSubjectCategId() {
+		return subjectCategId;
 	}
 
-	public Long getProfileImageId() {
-		return profileImageId;
+	public void setSubjectCategId(long subjectCategId) {
+		this.subjectCategId = subjectCategId;
 	}
 
-	public void setProfileImageId(Long profileImageId) {
-		this.profileImageId = profileImageId;
+	public long getCategName() {
+		return categName;
 	}
 
-	public byte[] getImage() {
-		return image;
+	public void setCategName(long categName) {
+		this.categName = categName;
 	}
 
-	public void setImage(byte[] image) {
-		this.image = image;
+	public Subject getSubject() {
+		return subject;
 	}
 
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getType() {
-		return type;
-	}
-
-	public void setType(String type) {
-		this.type = type;
+	public void setSubject(Subject subject) {
+		this.subject = subject;
 	}
 
 	public long getCreatedDate() {
@@ -120,6 +108,7 @@ public class ProfileImage implements Serializable {
 	public void setModifiedBy(String modifiedBy) {
 		this.modifiedBy = modifiedBy;
 	}
+    
+    
 	
-
 }

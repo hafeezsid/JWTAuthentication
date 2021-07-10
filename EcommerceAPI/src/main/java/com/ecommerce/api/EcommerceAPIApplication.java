@@ -1,29 +1,29 @@
 package com.ecommerce.api;
 
-import javax.annotation.PostConstruct;
-
-import org.springframework.beans.factory.annotation.Autowired;
+import org.modelmapper.ModelMapper;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-import com.ecommerce.api.entity.User;
-import com.ecommerce.api.model.Employee;
-import com.ecommerce.api.repository.EmployeeRepository;
-import com.ecommerce.api.repository.UserRepository;
+import org.springframework.context.annotation.Bean;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @SpringBootApplication
+@EnableJpaAuditing
+@EnableTransactionManagement
 public class EcommerceAPIApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(EcommerceAPIApplication.class, args);
 	}
 	
-	@Autowired
-	private UserRepository userRepo;
+	@Bean
+	public ModelMapper modelMapper() {
+	    return new ModelMapper();
+	}
 	
-	@Autowired
-	private EmployeeRepository empRepo;
-	
+	/*
+	 * @Autowired private UserRepository userRepo;
+	 */
 	/*
 	 * @PostConstruct public void init() throws Exception { User u1=new
 	 * User("Mohd","Hafeez","haf@gmail.com","hafeez","hafeez"); String []a=

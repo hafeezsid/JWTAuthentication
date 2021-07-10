@@ -6,14 +6,21 @@ import java.util.Date;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 @Entity(name = "users")
+@EntityListeners(AuditingEntityListener.class)
 public class User implements Serializable {
 	/**
 	 * 
@@ -32,7 +39,7 @@ public class User implements Serializable {
 	private String middleName;
 	@Column(name = "email")
 	private String email;
-	@Column(name = "username")
+	@Column(name = "username", unique = true, nullable = false)
 	private String username;
 	@Column(name = "password")
 	private String password;
@@ -43,13 +50,10 @@ public class User implements Serializable {
 	@Column(name = "is_not_locked")
 	private boolean isNotLocked;
 	
-	@OneToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
-	@JoinColumn(name = "profile_image_id",referencedColumnName = "image_id")
-	private ProfileImage profileImage;
-	
 	
 	@OneToOne(mappedBy = "user",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
-	private TutorPersonalInfo tutorPersonalInfo;
+	private TutorProfile tutorProfile;
+	
 	
 	/*
 	 * @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
@@ -64,11 +68,37 @@ public class User implements Serializable {
 	@Column
 	private String userType;
 	
-	@Column 
-	private Boolean isProfileComplete;
+	@Column (columnDefinition = "boolean default false")
+	private Boolean isProfileApproved;
+	
+	@Column(columnDefinition = "boolean default false")
+	private Boolean isRegFirstStepComplete;
+	
+	@Column (columnDefinition = "boolean default false")
+	private Boolean isRegSecondStepComplete;
+	
+	@Column(columnDefinition = "boolean default false") 
+	private Boolean isRegFinalStepComplete;
+	
 	
 	private String[] roles; // ROLE_USER, ROLE_ADMIN
 	private String[] authorities; // delete, update, read, insert
+	
+	@Column(name = "created_date", nullable = false, updatable = false)
+    @CreatedDate
+    private long createdDate;
+
+    @Column(name = "modified_date")
+    @LastModifiedDate
+    private long modifiedDate;
+    
+    @Column(name = "created_by")
+    @CreatedBy
+    private String createdBy;
+
+    @Column(name = "modified_by")
+    @LastModifiedBy
+    private String modifiedBy;
 	
 	public User() {
 	}
@@ -229,38 +259,9 @@ public class User implements Serializable {
 		this.contactNumber = contactNumber;
 	}
 
-	public ProfileImage getProfileImage() {
-		return profileImage;
-	}
-
-	public void setProfileImage(ProfileImage profileImage) {
-		this.profileImage = profileImage;
-	}
+	
 	
 
-
-	public TutorPersonalInfo getTutorPersonalInfo() {
-		return tutorPersonalInfo;
-	}
-
-	public void setTutorPersonalInfo(TutorPersonalInfo tutorPersonalInfo) {
-		this.tutorPersonalInfo = tutorPersonalInfo;
-	}
-
-	public Boolean getIsProfileComplete() {
-		return isProfileComplete;
-	}
-
-	public void setIsProfileComplete(Boolean isProfileComplete) {
-		this.isProfileComplete = isProfileComplete;
-	}
-
-	/*
-	 * public StudentProfile getStudentProfile() { return studentProfile; }
-	 * 
-	 * public void setStudentProfile(StudentProfile studentProfile) {
-	 * this.studentProfile = studentProfile; }
-	 */
 	public String getUserType() {
 		return userType;
 	}
@@ -269,13 +270,83 @@ public class User implements Serializable {
 		this.userType = userType;
 	}
 
-	public boolean isProfileComplete() {
-		return isProfileComplete;
+	
+
+	public Boolean getIsProfileApproved() {
+		return isProfileApproved;
 	}
 
-	public void setProfileComplete(boolean isProfileComplete) {
-		this.isProfileComplete = isProfileComplete;
+	public void setIsProfileApproved(Boolean isProfileApproved) {
+		this.isProfileApproved = isProfileApproved;
 	}
+
+	public TutorProfile getTutorProfile() {
+		return tutorProfile;
+	}
+
+	public void setTutorProfile(TutorProfile tutorProfile) {
+		this.tutorProfile = tutorProfile;
+	}
+
+	public Boolean getIsRegFirstStepComplete() {
+		return isRegFirstStepComplete;
+	}
+
+	public void setIsRegFirstStepComplete(Boolean isRegFirstStepComplete) {
+		this.isRegFirstStepComplete = isRegFirstStepComplete;
+	}
+
+	public Boolean getIsRegSecondStepComplete() {
+		return isRegSecondStepComplete;
+	}
+
+	public void setIsRegSecondStepComplete(Boolean isRegSecondStepComplete) {
+		this.isRegSecondStepComplete = isRegSecondStepComplete;
+	}
+
+	public Boolean getIsRegFinalStepComplete() {
+		return isRegFinalStepComplete;
+	}
+
+	public void setIsRegFinalStepComplete(Boolean isRegFinalStepComplete) {
+		this.isRegFinalStepComplete = isRegFinalStepComplete;
+	}
+
+	public long getCreatedDate() {
+		return createdDate;
+	}
+
+	public void setCreatedDate(long createdDate) {
+		this.createdDate = createdDate;
+	}
+
+	public long getModifiedDate() {
+		return modifiedDate;
+	}
+
+	public void setModifiedDate(long modifiedDate) {
+		this.modifiedDate = modifiedDate;
+	}
+
+	public String getCreatedBy() {
+		return createdBy;
+	}
+
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
+	}
+
+	public String getModifiedBy() {
+		return modifiedBy;
+	}
+
+	public void setModifiedBy(String modifiedBy) {
+		this.modifiedBy = modifiedBy;
+	}
+
+	
+
+	
 	
 	
 }

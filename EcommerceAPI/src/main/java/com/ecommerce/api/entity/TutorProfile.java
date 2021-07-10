@@ -2,14 +2,16 @@ package com.ecommerce.api.entity;
 
 import java.io.Serializable;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -17,34 +19,40 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-@Entity
+@Entity(name = "tutor_profile_mast")
 @EntityListeners(AuditingEntityListener.class)
-public class UserLanguage implements Serializable{
+public class TutorProfile implements Serializable{
 
+	
+	
 	
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 5241124256854446211L;
-
+	private static final long serialVersionUID = -6301374254499919984L;
+	
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "user_language_id")
-	private long userLanguageId;
-	@Column
-	private String languageCode;
-	@Column
-	private String levelCode;
-	@Column
-	private boolean isDefault;
+	@Column(name = "tutor_profile_mast_id")
+	private long tutorProfileMastId;
 	
-	@ManyToOne
-	@JoinColumn(name="tutor_personal_info_id", referencedColumnName = "tutor_personal_info_id")
-	@JsonIgnore
+	@OneToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+	@JoinColumn(name = "user_id",referencedColumnName = "user_id")
+	private User user;
+
+	@OneToOne(mappedBy = "tutorProfile",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
 	private TutorPersonalInfo tutorPersonalInfo;
 	
+	@OneToOne(mappedBy = "tutorProfile",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+	private TutorProfileInfo tutorProfileInfo;
+	
+	@OneToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+	@JoinColumn(name = "profile_image_id",referencedColumnName = "image_id")
+	private ProfileImage profileImage;
+	
+	@Column 
+	private Boolean isProfileComplete;
 	
 	@Column(name = "created_date", nullable = false, updatable = false)
     @CreatedDate
@@ -62,24 +70,20 @@ public class UserLanguage implements Serializable{
     @LastModifiedBy
     private String modifiedBy;
 	
-	public UserLanguage() {
+	public long getTutorProfileMastId() {
+		return tutorProfileMastId;
 	}
 
-	public long getUserLanguageId() {
-		return userLanguageId;
+	public void setTutorProfileMastId(long tutorProfileMastId) {
+		this.tutorProfileMastId = tutorProfileMastId;
 	}
 
-	public void setUserLanguageId(long userLanguageId) {
-		this.userLanguageId = userLanguageId;
+	public User getUser() {
+		return user;
 	}
 
-	
-	public boolean isDefault() {
-		return isDefault;
-	}
-
-	public void setDefault(boolean isDefault) {
-		this.isDefault = isDefault;
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	public TutorPersonalInfo getTutorPersonalInfo() {
@@ -90,20 +94,28 @@ public class UserLanguage implements Serializable{
 		this.tutorPersonalInfo = tutorPersonalInfo;
 	}
 
-	public String getLanguageCode() {
-		return languageCode;
+	public TutorProfileInfo getTutorProfileInfo() {
+		return tutorProfileInfo;
 	}
 
-	public void setLanguageCode(String languageCode) {
-		this.languageCode = languageCode;
+	public void setTutorProfileInfo(TutorProfileInfo tutorProfileInfo) {
+		this.tutorProfileInfo = tutorProfileInfo;
 	}
 
-	public String getLevelCode() {
-		return levelCode;
+	public Boolean getIsProfileComplete() {
+		return isProfileComplete;
 	}
 
-	public void setLevelCode(String levelCode) {
-		this.levelCode = levelCode;
+	public void setIsProfileComplete(Boolean isProfileComplete) {
+		this.isProfileComplete = isProfileComplete;
+	}
+
+	public ProfileImage getProfileImage() {
+		return profileImage;
+	}
+
+	public void setProfileImage(ProfileImage profileImage) {
+		this.profileImage = profileImage;
 	}
 
 	public long getCreatedDate() {
@@ -137,9 +149,6 @@ public class UserLanguage implements Serializable{
 	public void setModifiedBy(String modifiedBy) {
 		this.modifiedBy = modifiedBy;
 	}
-
-	
-	
 	
 	
 }

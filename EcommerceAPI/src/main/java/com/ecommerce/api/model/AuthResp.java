@@ -1,19 +1,27 @@
 package com.ecommerce.api.model;
 
+import com.ecommerce.api.dto.UserDto;
+
 public class AuthResp {
- private String username;
- private String token;
-public String getUsername() {
-	return username;
-}
-public void setUsername(String username) {
-	this.username = username;
-}
-public String getToken() {
-	return token;
-}
-public void setToken(String token) {
-	this.token = token;
-}
- 
+	private UserDto user;
+	private String token;
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
+
+	public UserDto getUser() {
+		return user;
+	}
+
+	public void setUser(UserDto user) {
+		this.user = user;
+	}
+	
+	
+
 }

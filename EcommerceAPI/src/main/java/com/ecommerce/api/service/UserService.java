@@ -1,14 +1,16 @@
 package com.ecommerce.api.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ecommerce.api.entity.User;
-import com.ecommerce.api.exceptionHandler.ResourceNotFoundException;
-import com.ecommerce.api.entity.ProfileImage;
 import com.ecommerce.api.repository.UserRepository;
 
 @Service
@@ -16,11 +18,26 @@ public class UserService {
 
 	@Autowired
 	UserRepository userRepository;
-	
+
 	@Autowired
 	ProfileImageService profileImageService;
+
+	@Autowired
+	UserRepository userRepo;
+
+	public String getLoggedInUsername() {
+		return getAuthentication().getName();
+
+	}
 	
-	
+	public Authentication getAuthentication() {
+		return SecurityContextHolder.getContext().getAuthentication();
+	}
+
+	public User getLoggedInUserDetails() {
+		String username = getAuthentication().getName();
+		return userRepo.findByUsername(username);
+	}
 
 	public User saveUser(User user) {
 		return userRepository.save(user);
@@ -35,26 +52,11 @@ public class UserService {
 
 		return userRepository.findByUsername(userId);
 	}
-
+	@Transactional(isolation = Isolation.READ_COMMITTED,propagation = Propagation.REQUIRED)
 	public User updateUser(User user) {
 		return userRepository.save(user);
-		
+
 	}
 
-	public User saveProfileImage(String id, byte[] image) {
-		User user=userRepository.findByUsername(id);
-				
-		if(user!=null) {
-			ProfileImage photoObj=new ProfileImage();
-			photoObj.setImage(image);
-			user.setProfileImage(photoObj);
-			return userRepository.save(user);
-		}
-		else {
-			throw new ResourceNotFoundException("User Not Found");
-		}
-	}
 
-	
-	
 }

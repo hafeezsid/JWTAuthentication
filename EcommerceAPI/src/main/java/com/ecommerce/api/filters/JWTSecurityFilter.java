@@ -53,7 +53,7 @@ public class JWTSecurityFilter extends OncePerRequestFilter {
 		if(username !=null && SecurityContextHolder.getContext().getAuthentication()==null)
 		{
 			UserDetails userDetails=userDetailService.loadUserByUsername(username);
-			log.info("Hello");
+			log.info("User is identified");
 			
 			if(JwtUtil.validateToken(token, userDetails)) {
 				 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
@@ -65,23 +65,28 @@ public class JWTSecurityFilter extends OncePerRequestFilter {
 		}
 		}catch (SignatureException e) {
 	        log.info("Invalid JWT signature.");
-	        log.trace("Invalid JWT signature trace: {}", e);
+	        log.error("Invalid JWT signature trace: {}", e);
 	        throw new AuthenticationException("Invalid JWT signature");
 	    } catch (MalformedJwtException e) {
 	        log.info("Invalid JWT token.");
-	        log.trace("Invalid JWT token trace: {}", e);
+	        log.error("Invalid JWT token trace: {}", e);
 	        throw new AuthenticationException("Invalid JWT token");
 	    } catch (ExpiredJwtException e) {
 	        log.info("Your");
-	        log.trace("Expired JWT token trace: {}", e);
+	        log.error("Expired JWT token trace: {}", e);
 	        throw new AuthenticationException("User session has expired");
 	    } catch (UnsupportedJwtException e) {
 	        log.info("Unsupported JWT token.");
-	        log.trace("Unsupported JWT token trace: {}", e);
+	        log.error("Unsupported JWT token trace: {}", e);
 	        throw new AuthenticationException(e.getMessage());
 	    } catch (IllegalArgumentException e) {
 	        log.info("JWT token compact of handler are invalid.");
-	        log.trace("JWT token compact of handler are invalid trace: {}", e);
+	        log.error("JWT token compact of handler are invalid trace: {}", e);
+	        throw new AuthenticationException(e.getMessage());
+	    }
+		catch (Exception e) {
+	        log.info("Authentication Error");
+	        log.error(e.getMessage(), e);
 	        throw new AuthenticationException(e.getMessage());
 	    }
 		filterChain.doFilter(request, response);

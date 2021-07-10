@@ -14,6 +14,11 @@ import com.ecommerce.api.entity.User;
 	
 public class UserPrincipal implements UserDetails{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5281823702977618736L;
+	
 	private User user;
 	
 	public UserPrincipal() {
