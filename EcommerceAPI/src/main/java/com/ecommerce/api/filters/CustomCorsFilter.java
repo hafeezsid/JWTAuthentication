@@ -33,6 +33,7 @@ public class CustomCorsFilter {
 	 * }
 	 */
 	 
+	@SuppressWarnings("deprecation")
 	@Bean
 	   public WebMvcConfigurer corsConfigurer() {
 	      return new WebMvcConfigurerAdapter() {
@@ -46,7 +47,7 @@ public class CustomCorsFilter {
 	            		 "Accept","Authorization","Origin, Accept","X-Requested-With")
 	            .allowedMethods("POST", "PUT", "GET", "OPTIONS", "DELETE")
 	            .exposedHeaders("Origin", "Access-Control-Allow-Origin","Content-Type",
-	            		"Access-Control-Reuqest-Method","Access-Control-Request-Headers,",	 "Accept","Authorization")
+	            		"Access-Control-Reuqest-Method","Access-Control-Request-Headers,X-Requested-With",	 "Accept","Authorization")
 	            ;
 	         }
 	      };

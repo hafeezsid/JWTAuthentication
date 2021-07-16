@@ -1,12 +1,15 @@
 package com.ecommerce.api.controller;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.ecommerce.api.dto.TutorListDto;
+import com.ecommerce.api.dto.TutorListViewDto;
 import com.ecommerce.api.dto.TutorPersonalInfoDto;
 import com.ecommerce.api.dto.TutorProfileInfoDto;
 import com.ecommerce.api.entity.ProfileImage;
@@ -74,6 +79,37 @@ public class TutorController {
 		
 	}
 	
+	@GetMapping("/fetch/{tutorId}")
+	public ResponseEntity<TutorListViewDto> fetchTutorbyId(@PathVariable long tutorId){
+		try {
+			TutorListViewDto dto=new TutorListViewDto();
+			dto.setUserId(tutorId);
+			dto=tutorService.findByTutorId(dto);
+		return new ResponseEntity<>(dto,HttpStatus.OK);
+	}
+	catch (Exception e) {
+		throw new ApplicationException("Error occurred while fetching tutors");
+	}
+	}
+	
+	@GetMapping("/fetch")
+	public ResponseEntity<TutorListDto> fetchAllTutor(@RequestParam Map<String,String> paramMaps)
+	{
+		try {
+		Integer page=Integer.valueOf(paramMaps.get("page"));
+		Integer size=Integer.valueOf(paramMaps.get("size"));
+		Pageable pageable=PageRequest.of(page, size);
+		TutorListDto tutorListDto=new TutorListDto();
+		tutorListDto.setPage(page);
+		tutorListDto.setSize(size);
+		List<TutorListViewDto> tutorList= tutorService.findAllByPageAndSize(pageable,tutorListDto);
+		tutorListDto.setTutorList(tutorList);
+		return new ResponseEntity<>(tutorListDto,HttpStatus.OK);
+		}
+		catch (Exception e) {
+			throw new ApplicationException("Error occurred while fetching tutors");
+		}
+	}
 	
 	
 	@PostMapping("/saveTeachingInfo")
@@ -96,23 +132,40 @@ public class TutorController {
 	
 	@GetMapping("/basicInfo")
 	public ResponseEntity<TutorPersonalInfoDto> fetchPersonalInfo(){
+		try {
 		User user=userService.getLoggedInUserDetails();
 		TutorPersonalInfoDto infoObj=new TutorPersonalInfoDto();
+	
 		TutorProfile tutorP=tutorService.fetchTutorProfileByUser(user);
 		if(tutorP!=null) {
 			infoObj=objectMapper.convertValue(tutorP.getTutorPersonalInfo(), TutorPersonalInfoDto.class);
-			if(tutorP.getProfileImage()!=null)
-			infoObj.setProfilePicByte(tutorP.getProfileImage().getImage());
+			if(infoObj==null) {
+				infoObj=new TutorPersonalInfoDto();
+			}
+			if(tutorP.getProfileImage()!=null) {
+				logger.info(tutorP.getProfileImage().getImage().toString());
+				infoObj.setProfilePicByte(tutorP.getProfileImage().getImage());
+			}
 		}
 		return new ResponseEntity<>(infoObj,HttpStatus.OK); 
+		}catch (Exception e) {
+			logger.error("Error ocurred inside method fetchPersonalInfo()", e);
+			throw new ApplicationException("Error occurred while fetching tutor Details", e);
+		}
 	}
 	
 	@GetMapping("/teachingInfo")
 	public ResponseEntity<TutorProfileInfoDto> fetchTeachingInfo(){
+		try {
 		User user=userService.getLoggedInUserDetails();
 		TutorProfile tutorP=tutorService.fetchTutorProfileByUser(user);
 		TutorProfileInfoDto infoObj=objectMapper.convertValue(tutorP.getTutorProfileInfo(), TutorProfileInfoDto.class);
 		return new ResponseEntity<>(infoObj,HttpStatus.OK); 
+		}
+		catch (Exception e) {
+			logger.error("Error occurred while fetching tutor Details", e);
+			throw new ApplicationException("Error occurred while fetching tutor Details", e);
+		}
 	}
 	@PostMapping("/education")
 	public ResponseEntity<TutorEducation> saveEducation(
@@ -135,7 +188,8 @@ public class TutorController {
 			tutorEducation.setInstitutionName(convertedObject.get("institutionName").getAsString());
 			tutorEducation.setMajor(convertedObject.get("major").getAsString());
 			tutorEducation.setDegree(convertedObject.get("degree").getAsString());
-			tutorEducation.setAdditionInfo(convertedObject.get("additionalInfo").getAsString());
+			if(!convertedObject.get("additionalInfo").isJsonNull())
+				tutorEducation.setAdditionInfo(convertedObject.get("additionalInfo").getAsString());
 			
 			tutorEducation.setAttachedDoc(file.getBytes());
 			tutorEducation.setDocumentType(file.getContentType());
@@ -154,6 +208,7 @@ public class TutorController {
 				tpi.setEducations(eduSet);
 				tutorEducation.setTutorProfileInfo(tpi);
 				tutorService.saveTutorProfileInfo(tpi);
+				tutorEducation=tpi.getEducations().stream().findFirst().get();
 			}
 			
 			return new ResponseEntity<>(tutorEducation,HttpStatus.OK);
@@ -181,7 +236,8 @@ public class TutorController {
 			tutorExperience.setCountry(convertedObject.get("country").getAsString());
 			tutorExperience.setState(convertedObject.get("state").getAsString());
 			tutorExperience.setCity(convertedObject.get("city").getAsString());
-			tutorExperience.setAdditionInfo(convertedObject.get("additionalInfo").getAsString());
+			if(!convertedObject.get("additionalInfo").isJsonNull())
+				tutorExperience.setAdditionInfo(convertedObject.get("additionalInfo").getAsString());
 			tutorExperience.setDocumentType("Experience");
 			tutorExperience.setUploadStatus(true);
 			if(tutorP.getTutorProfileInfo()!=null)
@@ -224,6 +280,7 @@ public class TutorController {
 			tutorCertificate.setAcquiredYear(convertedObject.get("acquiredYear").getAsInt());
 			tutorCertificate.setCertificateName(convertedObject.get("certificateName").getAsString());
 			tutorCertificate.setProvider(convertedObject.get("provider").getAsString());
+			if(!convertedObject.get("certificateLink").isJsonNull())
 			tutorCertificate.setCertificateLink(convertedObject.get("certificateLink").getAsString());
 			tutorCertificate.setAttachedDoc(file.getBytes());
 			tutorCertificate.setUploadStatus(true);
@@ -251,37 +308,40 @@ public class TutorController {
 	
 	
 	@DeleteMapping("/education/{id}")
-	public ResponseEntity<String> deleteEducation(
+	public ResponseEntity<Long> deleteEducation(
 			@PathVariable("id") long tutorEducatioId )
 	{
 			try{
 			tutorService.deleleTutorEducationById(tutorEducatioId);
-			return new ResponseEntity<>("Deleted",HttpStatus.OK);
+			return new ResponseEntity<>(tutorEducatioId,HttpStatus.OK);
 			}catch (Exception e) {
+				logger.error(e.getMessage(),e);
 				throw new ApplicationException("Cannot delete education.", e);
 			}
 	}
 	
 	@DeleteMapping("/experience/{id}")
-	public ResponseEntity<String> deleteExperience(
+	public ResponseEntity<Long> deleteExperience(
 			@PathVariable("id") long  tutorExperienceId )
 	{
 			try{
 			tutorService.deleleTutorExperienceById(tutorExperienceId);
-			return new ResponseEntity<>("Deleted",HttpStatus.OK);
+			return new ResponseEntity<Long>(tutorExperienceId,HttpStatus.OK);
 			}catch (Exception e) {
+				logger.error(e.getMessage(),e);
 				throw new ApplicationException("Cannot delete education.", e);
 			}
 	}
 	
 	@DeleteMapping("/certificate/{id}")
-	public ResponseEntity<String> deleteCetificate(
-			@PathVariable("id") long  tutorCertificateId )
+	public ResponseEntity<Long> deleteCetificate(
+			@PathVariable("id") long tutorCertificateId )
 	{
 			try{
 			tutorService.deleleTutorCertificateById(tutorCertificateId);
-			return new ResponseEntity<>("Deleted",HttpStatus.OK);
+			return new ResponseEntity<>(tutorCertificateId,HttpStatus.OK);
 			}catch (Exception e) {
+				logger.error(e.getMessage(),e);
 				throw new ApplicationException("Cannot delete education.", e);
 			}
 	}
@@ -310,6 +370,7 @@ public class TutorController {
 				tutorService.saveTutorProfileWithImage(tutorP);
 			return new ResponseEntity<String>("true",HttpStatus.OK);
 		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
 			throw new ApplicationException("Error while uploading image");
 		}
 	}

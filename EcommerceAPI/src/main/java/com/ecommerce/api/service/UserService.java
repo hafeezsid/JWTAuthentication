@@ -16,8 +16,6 @@ import com.ecommerce.api.repository.UserRepository;
 @Service
 public class UserService {
 
-	@Autowired
-	UserRepository userRepository;
 
 	@Autowired
 	ProfileImageService profileImageService;
@@ -40,22 +38,27 @@ public class UserService {
 	}
 
 	public User saveUser(User user) {
-		return userRepository.save(user);
+		return userRepo.save(user);
 	}
 
 	public List<User> fetchAllUser() {
 
-		return userRepository.findAll();
+		return userRepo.findAll();
 	}
 
 	public User findByUsername(String userId) {
 
-		return userRepository.findByUsername(userId);
+		return userRepo.findByUsername(userId);
 	}
+	
 	@Transactional(isolation = Isolation.READ_COMMITTED,propagation = Propagation.REQUIRED)
 	public User updateUser(User user) {
-		return userRepository.save(user);
+		return userRepo.save(user);
 
+	}
+	
+	public User findByUserIdAndType(long userId, String type) {
+		return userRepo.findByUserIdAndType(userId, type);
 	}
 
 
