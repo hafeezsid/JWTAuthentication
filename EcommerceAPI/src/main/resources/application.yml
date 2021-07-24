@@ -27,9 +27,9 @@ spring:
             default_schema: tutor_app      hibernate:        ddl-auto: update
       database-platform: org.hibernate.dialect.PostgreSQLDialect
    datasource:
-      url: "jdbc:postgresql://localhost:5432/tutor_student" 
-      username: tutorappuser
-      password: tutoradmin
+      url: "jdbc:postgresql://localhost:5432/tutor_factory" 
+      username: postgres
+      password: admin
    h2:
       console:
          enabled: true

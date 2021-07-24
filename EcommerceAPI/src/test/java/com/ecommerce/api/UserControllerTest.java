@@ -14,10 +14,10 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.ecommerce.api.entity.User;
-import com.ecommerce.api.repository.UserRepository;
-import com.ecommerce.api.service.UserService;
-import com.ecommerce.api.utils.JwtUtil;
+import com.tutor.api.entity.User;
+import com.tutor.api.repository.UserRepository;
+import com.tutor.api.service.UserService;
+import com.tutor.api.utils.JwtUtil;
 
 /*@RunWith(SpringRunner.class)*/
 @SpringBootTest

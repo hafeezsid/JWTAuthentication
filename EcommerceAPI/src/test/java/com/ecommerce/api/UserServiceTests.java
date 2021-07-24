@@ -16,11 +16,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.ecommerce.api.entity.User;
-import com.ecommerce.api.repository.ProfileImageRepository;
-import com.ecommerce.api.repository.UserRepository;
-import com.ecommerce.api.service.ProfileImageService;
-import com.ecommerce.api.service.UserService;
+import com.tutor.api.entity.User;
+import com.tutor.api.repository.ProfileImageRepository;
+import com.tutor.api.repository.UserRepository;
+import com.tutor.api.service.ProfileImageService;
+import com.tutor.api.service.UserService;
 
 @RunWith(SpringRunner.class)
 /* @ContextConfiguration(classes = {ProfileImageRepository.class}) */

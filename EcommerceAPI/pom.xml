@@ -8,11 +8,11 @@
 		<version>2.3.4.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.ecommerce</groupId>
-	<artifactId>EcommerceAPI</artifactId>
+	<groupId>com.tutor</groupId>
+	<artifactId>TutorAppAPI</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>AngularBackend</name>
-	<description>Demo project for Spring Boot</description>
+	<name>TutorApp</name>
+	<description>Tutor App</description>
 	<properties>
 		<java.version>14</java.version>
 		<spring-cloud.version>Hoxton.SR8</spring-cloud.version>
